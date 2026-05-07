@@ -1,4 +1,9 @@
 export default function SensorPanel({ data, darkMode }) {
+
+  const d = data?.data; // 👈 IMPORTANT
+
+  if (!d) return null;
+
   return (
     <div style={styles.box(darkMode)}>
 
@@ -11,17 +16,17 @@ export default function SensorPanel({ data, darkMode }) {
 
       <div style={styles.row}>
         <span style={styles.label(darkMode)}>🛏️ Mouvement</span>
-        <span style={styles.value(darkMode)}>{data.mouvement}</span>
+        <span style={styles.value(darkMode)}>{d.mouvement}</span>
       </div>
 
       <div style={styles.row}>
         <span style={styles.label(darkMode)}>🔊 Son</span>
-        <span style={styles.value(darkMode)}>{data.son}</span>
+        <span style={styles.value(darkMode)}>{d.son}</span>
       </div>
 
       <div style={styles.row}>
         <span style={styles.label(darkMode)}>🌡️ Température</span>
-        <span style={styles.value(darkMode)}>{data.temperature}°C</span>
+        <span style={styles.value(darkMode)}>{d.temperature}°C</span>
       </div>
 
     </div>

@@ -17,7 +17,7 @@ export default function Dashboard() {
 
   const styles = getStyles(darkMode);
 
-  // 📊 historique
+  // 📊 historique (CORRIGÉ)
   useEffect(() => {
     if (!data) return;
 
@@ -25,13 +25,16 @@ export default function Dashboard() {
       ...prev.slice(-10),
       {
         time: new Date().toLocaleTimeString(),
-        son: data.son,
-        temperature: data.temperature
+        son: data.data?.son,
+        temperature: data.data?.temperature
       }
     ]);
   }, [data]);
 
+  // ⛔ sécurité simple
   if (!data) return <p>Chargement...</p>;
+
+  console.log("DATA STRUCTURE:", data);
 
   return (
     <div style={styles.page}>

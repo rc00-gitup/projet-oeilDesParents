@@ -18,7 +18,6 @@ export default function ChartPanel({ history }) {
 
           <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
 
-          {/* 🔥 IMPORTANT FIX */}
           <XAxis dataKey="time" />
 
           <YAxis />
@@ -30,6 +29,7 @@ export default function ChartPanel({ history }) {
             dataKey="temperature"
             stroke="#3b82f6"
             strokeWidth={3}
+            connectNulls
           />
 
           <Line
@@ -37,6 +37,7 @@ export default function ChartPanel({ history }) {
             dataKey="son"
             stroke="#f59e0b"
             strokeWidth={3}
+            connectNulls
           />
 
         </LineChart>

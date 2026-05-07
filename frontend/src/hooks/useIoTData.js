@@ -1,42 +1,31 @@
-import { useEffect, useState } from "react";
-import { getIoTData } from "../services/api";
+import { useState, useEffect } from "react";
 
 export function useIoTData() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    const interval = setInterval(async () => {
-      const newData = await getIoTData();
 
-      // 🧠 ETAT
-      let etat = "normal";
+    const fetchData = () => {
+      fetch("http://127.0.0.1:5000/data")
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error("HTTP error " + res.status);
+          }
+          return res.json();
+        })
+        .then((json) => {
+          console.log("DATA BACKEND 👉", json);
+          setData(json);
+        })
+        .catch((err) => console.error("Erreur API:", err));
+    };
 
-      if (newData.son > 70 || newData.mouvement === 1) {
-        etat = "alerte";
-      } else if (newData.son > 40) {
-        etat = "vigilance";
-      }
+    fetchData();
 
-      // 👶 ACTIVITÉ
-      let activite = "dort";
-
-      if (newData.son > 70) {
-        activite = "pleure";
-      } else if (newData.mouvement === 1 || newData.son > 40) {
-        activite = "réveillé";
-      } else {
-        activite = "dort";
-      }
-
-      setData({
-        ...newData,
-        etat,
-        activite
-      });
-
-    }, 6000); // ⏱️ ralenti pour lecture
+    const interval = setInterval(fetchData, 2000);
 
     return () => clearInterval(interval);
+
   }, []);
 
   return data;

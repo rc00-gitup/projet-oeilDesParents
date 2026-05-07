@@ -77,7 +77,7 @@ const styles = {
   videoWrapper: (dark) => ({
     borderRadius: "12px",
     overflow: "hidden",
-    border: dark ? "1px solid #374151" : "1px solid #e2e8f0",
+    border: dark ? "#374151" : "#e2e8f0",
     background: "#000"
   }),
 

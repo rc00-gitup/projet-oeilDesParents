@@ -1,7 +1,12 @@
+console.log("ALERTBOX DATA 👉", data);
 export default function AlertBox({ data, darkMode }) {
 
-  const isAlert = data.etat === "alerte";
-  const isWarning = data.etat === "vigilance";
+  if (!data) return null;
+
+  const etat = data.etat || "normal";
+
+  const isAlert = etat === "alerte";
+  const isWarning = etat === "vigilance";
 
   const color = isAlert
     ? "#ef4444"
@@ -16,17 +21,29 @@ export default function AlertBox({ data, darkMode }) {
         🚨 Alertes système
       </h3>
 
+      {/* 🔥 ALERTES DYNAMIQUES BACKEND */}
+      {data.alerte?.length > 0 && (
+        <div style={{ marginBottom: "10px" }}>
+          {data.alerte.map((a, i) => (
+            <p key={i} style={styles.text(darkMode)}>
+              {a.message}
+            </p>
+          ))}
+        </div>
+      )}
+
+      {/* fallback UI */}
       {isAlert ? (
         <p style={styles.text(darkMode)}>
-          ⚠️ ALERTE : Situation critique détectée !
+          ⚠️ ALERTE CRITIQUE 🚨
         </p>
       ) : isWarning ? (
         <p style={styles.text(darkMode)}>
-          ⚠️ Vigilance : activité inhabituelle
+          ⚠️ Vigilance détectée
         </p>
       ) : (
         <p style={styles.text(darkMode)}>
-          ✅ Aucun problème détecté
+          ✅ Système normal
         </p>
       )}
 
@@ -34,6 +51,7 @@ export default function AlertBox({ data, darkMode }) {
   );
 }
 
+// 🎨 CSS (styles intégrés)
 const styles = {
   box: (dark, color) => ({
     background: dark ? "#1f2937" : "#ffffff",
@@ -43,17 +61,20 @@ const styles = {
     boxShadow: dark
       ? "0 8px 20px rgba(0,0,0,0.35)"
       : "0 6px 15px rgba(0,0,0,0.05)",
-    color: dark ? "#e5e7eb" : "#111827"
+    color: dark ? "#e5e7eb" : "#111827",
+    transition: "0.3s ease"
   }),
 
   title: (dark) => ({
     marginBottom: "10px",
     fontWeight: "600",
-    color: dark ? "#f9fafb" : "#0f172a"
+    color: dark ? "#f9fafb" : "#0f172a",
+    fontSize: "16px"
   }),
 
   text: (dark) => ({
     color: dark ? "#d1d5db" : "#374151",
-    fontSize: "14px"
+    fontSize: "14px",
+    lineHeight: "1.4"
   })
 };
