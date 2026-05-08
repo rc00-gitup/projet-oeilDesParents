@@ -57,7 +57,6 @@ def evaluation_rules(data):
     ]
 
     status = 'normal'
-
     alerts = []
 
     for rule_type, level, message in checks:

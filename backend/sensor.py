@@ -10,29 +10,30 @@ while True:
 
     cycle += 1
 
-    # 🎯 scénarios bébé (plus réaliste que full random)
+    # 🎯 scénarios bébé réalistes
     scenario = random.choice(["calme", "normal", "agite"])
 
     if scenario == "calme":
-        data = {
-            "mouvement": 0,
-            "son": random.randint(20, 40),
-            "temperature": random.randint(18, 24)
-        }
+        mouvement = 0
+        son = random.randint(20, 40)
+        temperature = random.randint(18, 24)
 
     elif scenario == "normal":
-        data = {
-            "mouvement": random.choice([0, 1]),
-            "son": random.randint(35, 65),
-            "temperature": random.randint(22, 30)
-        }
+        mouvement = random.choice([0, 1])
+        son = random.randint(35, 65)
+        temperature = random.randint(22, 30)
 
-    else:  # 🔥 agité (génère alertes)
-        data = {
-            "mouvement": random.choice([0, 1]),
-            "son": random.randint(70, 95),
-            "temperature": random.randint(30, 39)
-        }
+    else:  # 🔥 agité
+        mouvement = 1
+        son = random.randint(70, 95)
+        temperature = random.randint(30, 39)
+
+    data = {
+        "mouvement": mouvement,
+        "son": son,
+        "temperature": temperature,
+        "timestamp": time.strftime("%H:%M:%S")
+    }
 
     try:
         response = requests.post(URL, json=data)

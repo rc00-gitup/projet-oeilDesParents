@@ -4,17 +4,25 @@ def analyse_alerte(data):
 
     status, alerts = evaluation_rules(data)
 
-    # 🎯 mapping activité
+    # 🎯 mapping activité bébé (CORRIGÉ)
     if status == "alerte":
-        activite = "critique"
+        activite = "pleure"
     elif status == "vigilance":
-        activite = "vigilant"
+        activite = "réveillé"
     else:
-        activite = "calme"
+        activite = "dort"
 
     return {
         "etat": status,
-        "alerte": alerts,   # 🔥 on garde directement les alertes
-        "data": data,
-        "activite": activite
+        "alerte": alerts,
+        "activite": activite,
+
+        # ✅ structure backend stable pour React
+        "data": {
+            "mouvement": data.get("mouvement", 0),
+            "son": data.get("son", 0),
+            "temperature": data.get("temperature", 0)
+        },
+
+        "timestamp": data.get("timestamp", "")
     }
