@@ -1,80 +1,102 @@
-console.log("ALERTBOX DATA 👉", data);
 export default function AlertBox({ data, darkMode }) {
 
   if (!data) return null;
 
   const etat = data.etat || "normal";
+  const alerts = data.alerte || [];
 
-  const isAlert = etat === "alerte";
-  const isWarning = etat === "vigilance";
+  const config = {
+    alerte: {
+      color: "#ef4444",
+      icon: "🚨",
+      title: "Situation critique"
+    },
+    vigilance: {
+      color: "#f59e0b",
+      icon: "⚠️",
+      title: "Attention requise"
+    },
+    normal: {
+      color: "#22c55e",
+      icon: "✅",
+      title: "Tout est stable"
+    }
+  };
 
-  const color = isAlert
-    ? "#ef4444"
-    : isWarning
-    ? "#f59e0b"
-    : "#22c55e";
+  const current = config[etat] || config.normal;
 
   return (
-    <div style={styles.box(darkMode, color)}>
+    <div style={styles.box(darkMode, current.color)}>
 
       <h3 style={styles.title(darkMode)}>
-        🚨 Alertes système
+        {current.icon} {current.title}
       </h3>
 
-      {/* 🔥 ALERTES DYNAMIQUES BACKEND */}
-      {data.alerte?.length > 0 && (
-        <div style={{ marginBottom: "10px" }}>
-          {data.alerte.map((a, i) => (
-            <p key={i} style={styles.text(darkMode)}>
+      {/* 🔥 messages dynamiques backend */}
+      {alerts.length > 0 ? (
+        <div style={{ marginBottom: "12px" }}>
+          {alerts.map((a, i) => (
+            <div key={i} style={styles.alertItem(darkMode, current.color)}>
               {a.message}
-            </p>
+            </div>
           ))}
+        </div>
+      ) : (
+        <div style={styles.text(darkMode)}>
+          Aucun événement détecté pour le moment.
         </div>
       )}
 
-      {/* fallback UI */}
-      {isAlert ? (
-        <p style={styles.text(darkMode)}>
-          ⚠️ ALERTE CRITIQUE 🚨
-        </p>
-      ) : isWarning ? (
-        <p style={styles.text(darkMode)}>
-          ⚠️ Vigilance détectée
-        </p>
-      ) : (
-        <p style={styles.text(darkMode)}>
-          ✅ Système normal
-        </p>
-      )}
+      {/* 🧠 résumé intelligent */}
+      <div style={styles.summary(darkMode)}>
+        {etat === "alerte" && "Le système détecte une anomalie nécessitant une intervention."}
+        {etat === "vigilance" && "Des variations inhabituelles ont été détectées."}
+        {etat === "normal" && "Les paramètres du bébé sont stables et normaux."}
+      </div>
 
     </div>
   );
 }
 
-// 🎨 CSS (styles intégrés)
 const styles = {
   box: (dark, color) => ({
     background: dark ? "#1f2937" : "#ffffff",
     border: `1px solid ${color}`,
-    borderRadius: "12px",
+    borderRadius: "14px",
     padding: "16px",
     boxShadow: dark
-      ? "0 8px 20px rgba(0,0,0,0.35)"
-      : "0 6px 15px rgba(0,0,0,0.05)",
+      ? "0 10px 25px rgba(0,0,0,0.35)"
+      : "0 6px 18px rgba(0,0,0,0.06)",
     color: dark ? "#e5e7eb" : "#111827",
     transition: "0.3s ease"
   }),
 
   title: (dark) => ({
-    marginBottom: "10px",
-    fontWeight: "600",
-    color: dark ? "#f9fafb" : "#0f172a",
-    fontSize: "16px"
+    marginBottom: "12px",
+    fontWeight: "700",
+    fontSize: "16px",
+    color: dark ? "#f9fafb" : "#0f172a"
+  }),
+
+  alertItem: (dark, color) => ({
+    padding: "8px 10px",
+    marginBottom: "8px",
+    borderRadius: "8px",
+    background: dark ? "#111827" : `${color}10`,
+    borderLeft: `3px solid ${color}`,
+    fontSize: "13px",
+    color: dark ? "#d1d5db" : "#374151"
   }),
 
   text: (dark) => ({
-    color: dark ? "#d1d5db" : "#374151",
     fontSize: "14px",
+    opacity: 0.8
+  }),
+
+  summary: (dark) => ({
+    marginTop: "10px",
+    fontSize: "13px",
+    opacity: 0.85,
     lineHeight: "1.4"
   })
 };

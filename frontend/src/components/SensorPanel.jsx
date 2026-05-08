@@ -1,8 +1,20 @@
 export default function SensorPanel({ data, darkMode }) {
 
-  const d = data?.data; // 👈 IMPORTANT
+  const safeData = data || {};
 
-  if (!d) return null;
+  // 🔥 activité dynamique (cohérente avec BabyStatusCard)
+  const liveActivity =
+    safeData.son > 75
+      ? "pleure"
+      : safeData.mouvement === 1
+      ? "réveillé"
+      : "dort";
+
+  const activityEmoji = {
+    pleure: "😭",
+    réveillé: "👀",
+    dort: "😴"
+  };
 
   return (
     <div style={styles.box(darkMode)}>
@@ -11,28 +23,37 @@ export default function SensorPanel({ data, darkMode }) {
 
       <div style={styles.row}>
         <span style={styles.label(darkMode)}>👶 Activité</span>
-        <span style={styles.value(darkMode)}>{data.activite}</span>
+        <span style={styles.value(darkMode)}>
+          {activityEmoji[liveActivity]} {liveActivity}
+        </span>
       </div>
 
       <div style={styles.row}>
         <span style={styles.label(darkMode)}>🛏️ Mouvement</span>
-        <span style={styles.value(darkMode)}>{d.mouvement}</span>
+        <span style={styles.value(darkMode)}>
+          {safeData.mouvement ? "Détecté" : "Aucun"}
+        </span>
       </div>
 
       <div style={styles.row}>
         <span style={styles.label(darkMode)}>🔊 Son</span>
-        <span style={styles.value(darkMode)}>{d.son}</span>
+        <span style={styles.value(darkMode)}>
+          {safeData.son ?? 0}
+        </span>
       </div>
 
       <div style={styles.row}>
         <span style={styles.label(darkMode)}>🌡️ Température</span>
-        <span style={styles.value(darkMode)}>{d.temperature}°C</span>
+        <span style={styles.value(darkMode)}>
+          {safeData.temperature ?? 0}°C
+        </span>
       </div>
 
     </div>
   );
 }
 
+// 🎨 STYLES (OBLIGATOIRE)
 const styles = {
   box: (dark) => ({
     background: dark ? "#1f2937" : "#ffffff",

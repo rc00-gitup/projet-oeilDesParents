@@ -10,7 +10,7 @@ import {
 
 export default function ChartPanel({ history }) {
   return (
-    <div style={{ width: "100%", height: "300px" }}>
+    <div style={{ width: "100%", height: "300px", minHeight: "300px" }}>
 
       <ResponsiveContainer width="100%" height="100%">
 
@@ -19,9 +19,7 @@ export default function ChartPanel({ history }) {
           <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
 
           <XAxis dataKey="time" />
-
           <YAxis />
-
           <Tooltip />
 
           <Line

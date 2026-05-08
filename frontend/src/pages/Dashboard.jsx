@@ -10,6 +10,7 @@ import { useState, useEffect } from "react";
 export default function Dashboard() {
 
   const data = useIoTData();
+  console.log("LIVE DATA 👉", data);
 
   const [history, setHistory] = useState([]);
   const [darkMode, setDarkMode] = useState(false);
@@ -17,7 +18,20 @@ export default function Dashboard() {
 
   const styles = getStyles(darkMode);
 
-  // 📊 historique (CORRIGÉ)
+  // 🔥 normalisation des données
+  const d = data?.data || {};
+
+  const sensor = {
+    etat: data?.etat || "normal",
+    activite: data?.activite || "calme",
+    alerte: data?.alerte || [],
+    mouvement: d.mouvement ?? 0,
+    son: d.son ?? 0,
+    temperature: d.temperature ?? 0,
+    timestamp: data?.timestamp || ""
+  };
+
+  // 📊 historique propre
   useEffect(() => {
     if (!data) return;
 
@@ -25,13 +39,13 @@ export default function Dashboard() {
       ...prev.slice(-10),
       {
         time: new Date().toLocaleTimeString(),
-        son: data.data?.son,
-        temperature: data.data?.temperature
+        son: d.son ?? 0,
+        temperature: d.temperature ?? 0
       }
     ]);
   }, [data]);
 
-  // ⛔ sécurité simple
+  // ⛔ sécurité
   if (!data) return <p>Chargement...</p>;
 
   console.log("DATA STRUCTURE:", data);
@@ -55,7 +69,7 @@ export default function Dashboard() {
           {/* 👶 SURVEILLANCE BÉBÉ */}
           <div style={styles.card}>
             <h2 style={styles.h2}>👶 Surveillance bébé</h2>
-            <BabyStatusCard data={data} darkMode={darkMode} />
+            <BabyStatusCard data={sensor} darkMode={darkMode} />
           </div>
 
           {/* 📊 HISTORIQUE */}
@@ -72,13 +86,13 @@ export default function Dashboard() {
           {/* 🌡️ CAPTEURS */}
           <div style={styles.card}>
             <h2 style={styles.h2}>🌡️ Capteurs</h2>
-            <SensorPanel data={data} darkMode={darkMode} />
+            <SensorPanel data={sensor} darkMode={darkMode} />
           </div>
 
           {/* 🚨 ALERTES */}
           <div style={styles.card}>
             <h2 style={styles.h2}>🚨 Alertes</h2>
-            <AlertBox data={data} darkMode={darkMode} />
+            <AlertBox data={sensor} darkMode={darkMode} />
           </div>
 
           {/* 📷 CAMÉRA */}
