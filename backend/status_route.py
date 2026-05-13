@@ -3,6 +3,7 @@ from data_services import get_status
 
 status_bp = Blueprint("status_bp", __name__)
 
+
 @status_bp.route("/status", methods=["GET"])
-def get_current_status():
+def status():
     return jsonify(get_status())

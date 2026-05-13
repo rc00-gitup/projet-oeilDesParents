@@ -10,11 +10,16 @@ import {
 
 export default function ChartPanel({ history }) {
   return (
-    <div style={{ width: "100%", height: "300px", minHeight: "300px" }}>
-
-      <ResponsiveContainer width="100%" height="100%">
-
-        <LineChart data={history}>
+    <div
+      style={{
+        width: "100%",
+        height: "300px",
+        minHeight: "300px",
+        position: "relative"
+      }}
+    >
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart data={history || []}>
 
           <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
 
@@ -39,9 +44,7 @@ export default function ChartPanel({ history }) {
           />
 
         </LineChart>
-
       </ResponsiveContainer>
-
     </div>
   );
 }

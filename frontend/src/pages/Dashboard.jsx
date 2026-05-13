@@ -4,109 +4,171 @@ import SensorPanel from "../components/SensorPanel";
 import AlertBox from "../components/AlertBox";
 import ChartPanel from "../components/ChartPanel";
 import CameraFeed from "../components/CameraFeed";
+import Notification from "../components/Notification";
+
 import { useIoTData } from "../hooks/useIoTData";
-import { useState, useEffect } from "react";
+import { useNotification } from "../hooks/useNotification";
+import { useSound } from "../hooks/useSound";
+
+import { useState, useEffect, useRef } from "react";
 
 export default function Dashboard() {
 
-  const data = useIoTData();
-  console.log("LIVE DATA 👉", data);
+  const { data } = useIoTData();
+  const { playAlert } = useSound();
+
+  const {
+    notifications,
+    pushNotification,
+    syncWithEtat,
+    markAsRead,
+    history: notifHistory
+  } = useNotification();
 
   const [history, setHistory] = useState([]);
   const [darkMode, setDarkMode] = useState(false);
   const [cameraActive, setCameraActive] = useState(false);
+  const [showNotifPanel, setShowNotifPanel] = useState(false);
+  const [notifCount, setNotifCount] = useState(0);
+
+  const lastAlertRef = useRef(null);
 
   const styles = getStyles(darkMode);
 
-  // 🔥 normalisation des données
-  const d = data?.data || {};
-
-  const sensor = {
-    etat: data?.etat || "normal",
-    activite: data?.activite || "calme",
-    alerte: data?.alerte || [],
-    mouvement: d.mouvement ?? 0,
-    son: d.son ?? 0,
-    temperature: d.temperature ?? 0,
-    timestamp: data?.timestamp || ""
-  };
-
-  // 📊 historique propre
+  // =========================
+  // 📊 HISTORY
+  // =========================
   useEffect(() => {
-    if (!data) return;
+    if (!data?.data) return;
 
-    setHistory((prev) => [
-      ...prev.slice(-10),
+    const d = data.data;
+
+    setHistory(prev => [
+      ...prev.slice(-29),
       {
-        time: new Date().toLocaleTimeString(),
+        time: data.timestamp || new Date().toLocaleTimeString(),
         son: d.son ?? 0,
-        temperature: d.temperature ?? 0
+        temperature: d.temperature ?? 0,
+        mouvement: d.mouvement ?? 0
       }
     ]);
-  }, [data]);
 
-  // ⛔ sécurité
-  if (!data) return <p>Chargement...</p>;
+  }, [data?.timestamp]);
 
-  console.log("DATA STRUCTURE:", data);
+  // =========================
+  // 🚨 ALERT SYSTEM
+  // =========================
+  useEffect(() => {
+
+    if (!data?.etat) return;
+
+    syncWithEtat(data.etat);
+
+    if (data.etat !== "alerte") return;
+
+    const id = `${data.timestamp}-${data.etat}`;
+
+    if (lastAlertRef.current === id) return;
+    lastAlertRef.current = id;
+
+    setNotifCount(prev => prev + 1);
+    playAlert();
+
+    pushNotification({
+      id,
+      message: "🚨 Alerte détectée",
+      time: data.timestamp
+    });
+
+  }, [data?.timestamp, data?.etat]);
+
+  // =========================
+  // 📭 RESET ON OPEN
+  // =========================
+  useEffect(() => {
+    if (showNotifPanel) {
+      markAsRead();
+      setNotifCount(0);
+    }
+  }, [showNotifPanel]);
+
+  const sensor = {
+    etat: data?.etat ?? "normal",
+    activite: data?.activite ?? "calme",
+    son: data?.data?.son ?? 0,
+    mouvement: data?.data?.mouvement ?? 0,
+    temperature: data?.data?.temperature ?? 0,
+    timestamp: data?.timestamp ?? ""
+  };
 
   return (
     <div style={styles.page}>
 
-      {/* NAVBAR */}
+      <Notification notifications={notifications} />
+
       <Navbar
         darkMode={darkMode}
         setDarkMode={setDarkMode}
         cameraActive={cameraActive}
         setCameraActive={setCameraActive}
+        notifCount={notifCount}
+        showNotifPanel={showNotifPanel}
+        setShowNotifPanel={setShowNotifPanel}
       />
+
+      {showNotifPanel && (
+        <div style={styles.notifPanel}>
+          <h3 style={styles.title}>🔔 Historique notifications</h3>
+
+          {notifHistory.length === 0 ? (
+            <p style={styles.subtitle}>Aucune notification</p>
+          ) : (
+            notifHistory.map(n => (
+              <div key={n.id} style={styles.notifItem}>
+                <p style={styles.notifMessage}>{n.message}</p>
+                <small style={styles.notifTime}>{n.time}</small>
+              </div>
+            ))
+          )}
+        </div>
+      )}
 
       <div style={styles.grid}>
 
-        {/* LEFT SIDE */}
         <div style={styles.left}>
-
-          {/* 👶 SURVEILLANCE BÉBÉ */}
           <div style={styles.card}>
-            <h2 style={styles.h2}>👶 Surveillance bébé</h2>
+            <h2 style={styles.title}>👶 Surveillance bébé</h2>
             <BabyStatusCard data={sensor} darkMode={darkMode} />
           </div>
 
-          {/* 📊 HISTORIQUE */}
           <div style={styles.card}>
-            <h2 style={styles.h2}>📊 Historique</h2>
+            <h2 style={styles.title}>📊 Historique</h2>
             <ChartPanel history={history} />
           </div>
-
         </div>
 
-        {/* RIGHT SIDE */}
-        <div style={styles.right} className="dashboard-right">
-
-          {/* 🌡️ CAPTEURS */}
+        <div style={styles.right}>
           <div style={styles.card}>
-            <h2 style={styles.h2}>🌡️ Capteurs</h2>
+            <h2 style={styles.title}>🌡️ Capteurs</h2>
             <SensorPanel data={sensor} darkMode={darkMode} />
           </div>
 
-          {/* 🚨 ALERTES */}
           <div style={styles.card}>
-            <h2 style={styles.h2}>🚨 Alertes</h2>
+            <h2 style={styles.title}>🚨 Alertes</h2>
             <AlertBox data={sensor} darkMode={darkMode} />
           </div>
 
-          {/* 📷 CAMÉRA */}
           <div style={styles.card}>
-            <h2 style={styles.h2}>
+            <h2 style={styles.title}>
               📷 Caméra {cameraActive ? "🟢 LIVE" : "⚫ OFF"}
             </h2>
 
             <CameraFeed
               cameraActive={cameraActive}
+              sensor={sensor}
               darkMode={darkMode}
             />
           </div>
-
         </div>
 
       </div>
@@ -115,51 +177,83 @@ export default function Dashboard() {
 }
 
 const getStyles = (dark) => ({
+
   page: {
-    background: dark ? "#0f172a" : "#f1f5f9",
-    color: dark ? "#f9fafb" : "#0f172a",
+    background: dark ? "#0b1220" : "#f1f5f9",
     minHeight: "100vh",
-    padding: "80px 20px 40px",
+    padding: "80px 20px",
     display: "flex",
     justifyContent: "center",
-    transition: "0.3s"
+    transition: "all 0.3s ease",
+    fontFamily: "Inter, sans-serif"
   },
 
   grid: {
-  display: "grid",
-  gridTemplateColumns: "3fr 2fr",
-  gap: "28px",
-  width: "100%",
-  maxWidth: "1300px",
-  alignItems: "start"
+    display: "grid",
+    gridTemplateColumns: "3fr 2fr",
+    gap: "24px",
+    maxWidth: "1300px",
+    width: "100%"
   },
 
-  left: {
-  display: "flex",
-  flexDirection: "column",
-  gap: "20px"
-  },
-
-  right: {
-  display: "flex",
-  flexDirection: "column",
-  gap: "24px",
-  minWidth: "320px"
-  },
+  left: { display: "flex", flexDirection: "column", gap: "20px" },
+  right: { display: "flex", flexDirection: "column", gap: "20px" },
 
   card: {
-    background: dark ? "#1f2937" : "#ffffff",
+    background: dark
+      ? "linear-gradient(145deg, #111827, #0f172a)"
+      : "#fff",
+    padding: "20px",
     borderRadius: "18px",
-    padding: "24px",
-    border: dark ? "1px solid #374151" : "1px solid #e2e8f0",
+    border: dark ? "1px solid #1f2937" : "1px solid #e2e8f0",
     boxShadow: dark
-      ? "0 8px 24px rgba(0,0,0,0.35)"
-      : "0 10px 30px rgba(0,0,0,0.05)"
+      ? "0 10px 25px rgba(0,0,0,0.4)"
+      : "0 8px 20px rgba(0,0,0,0.06)",
+    transition: "all 0.25s ease"
   },
 
-  h2: {
-    marginBottom: "12px",
+  title: {
+    color: dark ? "#f9fafb" : "#111827",
+    fontSize: "25px",
     fontWeight: "600",
-    color: dark ? "#f9fafb" : "#0f172a"
+    marginBottom: "12px"
+  },
+
+  subtitle: {
+    color: dark ? "#9ca3af" : "#6b7280",
+    fontSize: "13px"
+  },
+
+  notifPanel: {
+    position: "fixed",
+    top: "80px",
+    right: "20px",
+    width: "360px",
+    maxHeight: "420px",
+    overflowY: "auto",
+    background: dark ? "#0b1220" : "#fff",
+    color: dark ? "#f9fafb" : "#111827",
+    borderRadius: "16px",
+    padding: "14px",
+    zIndex: 9999,
+    border: dark ? "1px solid #1f2937" : "1px solid #e5e7eb"
+  },
+
+  notifItem: {
+    padding: "10px",
+    marginBottom: "10px",
+    borderRadius: "12px",
+    background: dark ? "#111827" : "#f8fafc",
+    border: dark ? "1px solid #1f2937" : "1px solid #e5e7eb"
+  },
+
+  notifMessage: {
+    color: dark ? "#f9fafb" : "#111827",
+    fontSize: "13px"
+  },
+
+  notifTime: {
+    color: dark ? "#9ca3af" : "#6b7280",
+    fontSize: "11px"
   }
 });

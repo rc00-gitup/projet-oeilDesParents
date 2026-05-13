@@ -3,7 +3,12 @@ export default function AlertBox({ data, darkMode }) {
   if (!data) return null;
 
   const etat = data.etat || "normal";
-  const alerts = data.alerte || [];
+
+  const alerts = data?.alerts || (
+    etat === "alerte"
+      ? [{ message: "🚨 Alerte détectée par le système" }]
+      : []
+  );
 
   const config = {
     alerte: {
@@ -32,7 +37,6 @@ export default function AlertBox({ data, darkMode }) {
         {current.icon} {current.title}
       </h3>
 
-      {/* 🔥 messages dynamiques backend */}
       {alerts.length > 0 ? (
         <div style={{ marginBottom: "12px" }}>
           {alerts.map((a, i) => (
@@ -47,7 +51,6 @@ export default function AlertBox({ data, darkMode }) {
         </div>
       )}
 
-      {/* 🧠 résumé intelligent */}
       <div style={styles.summary(darkMode)}>
         {etat === "alerte" && "Le système détecte une anomalie nécessitant une intervention."}
         {etat === "vigilance" && "Des variations inhabituelles ont été détectées."}

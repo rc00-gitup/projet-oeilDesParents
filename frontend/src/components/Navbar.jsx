@@ -1,134 +1,237 @@
-import { useState } from "react";
-
 export default function Navbar({
   darkMode,
   setDarkMode,
   cameraActive,
-  setCameraActive
+  setCameraActive,
+  notifCount = 0,
+  showNotifPanel,
+  setShowNotifPanel
 }) {
-  const [notifCount] = useState(3);
 
   const styles = getStyles(darkMode);
 
   return (
+
     <div style={styles.nav}>
 
       {/* LOGO */}
       <h2 style={styles.logo}>
-        👁️ Oeil<span style={styles.highlight}>Des</span>Parents
+        👁️ Oeil
+        <span style={styles.highlight}>
+          Des
+        </span>
+        Parents
       </h2>
 
       {/* ACTIONS */}
       <div style={styles.actions}>
 
-        {/* 📷 CAMÉRA TOGGLE */}
+        {/* 📷 CAMERA */}
         <button
-          onClick={() => setCameraActive(!cameraActive)}
+          onClick={() =>
+            setCameraActive(prev => !prev)
+          }
           style={{
             ...styles.button,
+
             background: cameraActive
               ? "#22c55e"
               : darkMode
               ? "#334155"
               : "#e2e8f0",
-            color: cameraActive ? "#fff" : darkMode ? "#fff" : "#0f172a"
+
+            color: cameraActive || darkMode
+              ? "#fff"
+              : "#0f172a"
           }}
         >
-          {cameraActive ? "📷 LIVE" : "📷 Caméra"}
+          {cameraActive
+            ? "📷 LIVE"
+            : "📷 Caméra"}
         </button>
 
-        {/* 🔔 Notifications */}
-        <div style={styles.notif}>
+        {/* 🔔 NOTIFICATIONS */}
+        <div
+          style={styles.notif}
+          onClick={() =>
+            setShowNotifPanel(prev => !prev)
+          }
+        >
           🔔
+
           {notifCount > 0 && (
-            <span style={styles.badge}>{notifCount}</span>
+            <span style={styles.badge}>
+              {notifCount > 99
+                ? "99+"
+                : notifCount}
+            </span>
           )}
         </div>
 
         {/* 🌙 DARK MODE */}
         <button
-          onClick={() => setDarkMode(!darkMode)}
+          onClick={() =>
+            setDarkMode(prev => !prev)
+          }
           style={styles.button}
         >
-          {darkMode ? "☀️ Light" : "🌙 Dark"}
+          {darkMode
+            ? "☀️ Light"
+            : "🌙 Dark"}
         </button>
 
       </div>
+
     </div>
   );
 }
 
 const getStyles = (darkMode) => ({
+
+  /* NAVBAR */
   nav: {
+
     position: "fixed",
+
     top: 0,
     left: 0,
+
     width: "100%",
+
     zIndex: 1000,
 
-    background: darkMode
-      ? "rgba(30, 41, 59, 0.9)"
-      : "rgba(255, 255, 255, 0.9)",
+    display: "flex",
 
-    backdropFilter: "blur(10px)",
+    justifyContent: "space-between",
+
+    alignItems: "center",
 
     padding: "14px 28px",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
+
+    background: darkMode
+      ? "rgba(15,23,42,0.88)"
+      : "rgba(255,255,255,0.88)",
+
+    backdropFilter: "blur(12px)",
+
+    borderBottom: darkMode
+      ? "1px solid #1e293b"
+      : "1px solid #e2e8f0",
 
     boxShadow: darkMode
-      ? "0 2px 15px rgba(0,0,0,0.4)"
-      : "0 2px 15px rgba(0,0,0,0.08)"
+      ? "0 4px 20px rgba(0,0,0,0.35)"
+      : "0 4px 20px rgba(0,0,0,0.06)"
   },
 
+  /* LOGO */
   logo: {
-    fontWeight: "700",
-    fontSize: "20px",
-    color: darkMode ? "#fff" : "#0f172a",
+
+    margin: 0,
+
     display: "flex",
+
     alignItems: "center",
-    gap: "6px"
+
+    gap: "6px",
+
+    fontSize: "20px",
+
+    fontWeight: "700",
+
+    color: darkMode
+      ? "#fff"
+      : "#0f172a"
   },
 
   highlight: {
     color: "#3b82f6"
   },
 
+  /* ACTIONS */
   actions: {
+
     display: "flex",
+
     alignItems: "center",
+
     gap: "14px"
   },
 
+  /* NOTIFICATION */
   notif: {
+
     position: "relative",
+
+    padding: "8px 12px",
+
+    borderRadius: "12px",
+
+    cursor: "pointer",
+
+    userSelect: "none",
+
     fontSize: "20px",
-    cursor: "pointer",
-    padding: "6px 10px",
-    borderRadius: "10px",
-    background: darkMode ? "#1e293b" : "#f1f5f9",
-    color: darkMode ? "#fff" : "#0f172a"
+
+    transition: "0.25s ease",
+
+    background: darkMode
+      ? "#1e293b"
+      : "#f1f5f9",
+
+    color: darkMode
+      ? "#fff"
+      : "#0f172a"
   },
 
+  /* BADGE */
   badge: {
+
     position: "absolute",
-    top: "-4px",
-    right: "-6px",
+
+    top: "-5px",
+    right: "-5px",
+
+    minWidth: "18px",
+
+    height: "18px",
+
+    padding: "0 5px",
+
+    display: "flex",
+
+    alignItems: "center",
+
+    justifyContent: "center",
+
+    borderRadius: "999px",
+
+    fontSize: "10px",
+
+    fontWeight: "700",
+
     background: "#ef4444",
-    color: "white",
-    borderRadius: "50%",
-    fontSize: "11px",
-    padding: "2px 6px",
-    fontWeight: "bold"
+
+    color: "#fff",
+
+    boxShadow:
+      "0 2px 8px rgba(239,68,68,0.45)"
   },
 
+  /* BUTTON */
   button: {
-    padding: "7px 12px",
-    borderRadius: "10px",
+
     border: "none",
+
     cursor: "pointer",
-    transition: "0.3s",
-    fontWeight: "500"
+
+    padding: "8px 14px",
+
+    borderRadius: "10px",
+
+    fontSize: "14px",
+
+    fontWeight: "600",
+
+    transition: "0.25s ease"
   }
 });

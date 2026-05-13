@@ -1,6 +1,7 @@
 export default function BabyStatusCard({ data, darkMode }) {
 
   const safeData = data || {};
+  const d = safeData.data || {};
 
   const liveActivity =
     safeData.son > 75

@@ -1,0 +1,67 @@
+import { useRef, useState } from "react";
+
+import { useNotification } from "./useNotification";
+import { useSound } from "./useSound";
+
+export function useAlertSystem() {
+
+  const {
+    notifications,
+    showToast,
+    addToHistory
+  } = useNotification();
+
+  const { playAlert } = useSound();
+
+  // 🔒 anti doublon
+  const lastAlertRef = useRef(null);
+
+  const [aiMessage, setAiMessage] = useState("");
+
+  /* =========================
+      🚨 TRIGGER ALERT
+  ========================== */
+  const triggerAlert = (data) => {
+
+    if (!data) return;
+
+    const alertKey =
+      data.id ||
+      `${data.timestamp}_${data.etat}`;
+
+    // 🔒 évite doublons
+    if (lastAlertRef.current === alertKey) {
+      return;
+    }
+
+    lastAlertRef.current = alertKey;
+
+    // 🔊 son
+    playAlert();
+
+    // 🔔 toast
+    showToast({
+      id: alertKey,
+      message: "🚨 Alerte détectée"
+    });
+
+    // 📜 historique
+    addToHistory({
+      id: alertKey,
+      message: "🚨 Alerte détectée",
+      time: new Date().toLocaleTimeString()
+    });
+
+    // 🧠 IA désactivée pour stabilité
+    setAiMessage("");
+  };
+
+  return {
+
+    notifications,
+
+    triggerAlert,
+
+    aiMessage
+  };
+}
