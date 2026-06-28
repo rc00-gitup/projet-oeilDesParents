@@ -1,0 +1,102 @@
+/* ================= CARD ================= */
+
+.prediction-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #111827;
+}
+
+/* ================= HEADER ================= */
+
+.prediction-header {
+  font-size: 15px;
+  font-weight: 900;
+  color: #111827; /* noir comme demandé */
+}
+
+/* ================= MAIN ================= */
+
+.prediction-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+
+  margin-top: 6px;
+}
+
+/* ================= TEXT BLOCK ================= */
+
+.prediction-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ================= BIG LABEL ================= */
+
+.prediction-big {
+  font-size: 18px;
+  font-weight: 900;
+
+  color: #111827;
+
+  /* FIX police étirée */
+  font-family: "Inter", sans-serif;
+  letter-spacing: 0.2px;
+}
+
+.prediction-big.accent {
+  color: #6d28d9; /* violet IA */
+}
+
+/* ================= BEHAVIOR ================= */
+
+.prediction-behavior {
+  font-size: 13px;
+  color: #4b5563;
+}
+
+/* ================= CONFIDENCE BADGE ================= */
+
+.prediction-confidence-box {
+  margin-top: 10px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 6px 10px;
+
+  background: #6200ff; /* violet */
+  border-radius: 8px;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  width: fit-content;
+
+  color: #ffffff; /* texte global blanc */
+}
+
+/* valeur (%) encore plus visible */
+.prediction-confidence-box span {
+  color: #ffffff;
+  font-weight: 800;
+}
+
+/* ================= ICON ================= */
+
+.prediction-visual {
+  font-size: 50px;
+  opacity: 0.9;
+  transform: translateY(2px);
+}
+
+.prediction-visual.warning {
+  color: #f97316;
+}

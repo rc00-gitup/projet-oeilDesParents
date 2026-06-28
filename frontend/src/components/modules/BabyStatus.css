@@ -1,0 +1,182 @@
+/* ================= HEADER ================= */
+
+.baby-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.baby-header div:first-child {
+  font-size: 22px;
+  font-weight: 900;
+  color: #111827;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ================= STATUS BADGE ================= */
+
+.system-badge {
+  font-size: 14px;
+  font-weight: 800;
+
+  padding: 6px 12px;
+
+  border-radius: 999px;
+
+  transition: 0.3s ease;
+}
+
+.baby-card.green .system-badge {
+  color: #16a34a;
+  background: rgba(34, 197, 94, 0.12);
+}
+
+.baby-card.orange .system-badge {
+  color: #ea580c;
+  background: rgba(249, 115, 22, 0.12);
+}
+
+.baby-card.red .system-badge {
+  color: #dc2626;
+  background: rgba(239, 68, 68, 0.12);
+}
+
+/* ================= BODY ================= */
+
+.baby-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+/* ================= LEFT ================= */
+
+.baby-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.baby-emoji {
+  font-size: 72px;
+  line-height: 1;
+
+  /* Animation très douce */
+  animation: babyPulse 1s ease-in-out infinite;
+}
+
+.baby-big-text {
+  font-size: 32px;
+  font-weight: 900;
+
+  line-height: 1;
+
+  color: #111827;
+}
+
+.baby-score {
+  font-size: 16px;
+  font-weight: 700;
+
+  color: #2563eb;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  white-space: nowrap;
+}
+
+/* ================= RIGHT ================= */
+
+.baby-info {
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+
+  min-width: 220px;
+
+  font-size: 14px;
+  color: #1e293b;
+}
+
+.baby-info div {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  line-height: 1.4;
+}
+
+.baby-info strong {
+  color: #7c3aed;
+  font-weight: 700;
+}
+
+/* ================= FOOTER ================= */
+
+.baby-footer {
+  margin-top: 16px;
+  padding-top: 12px;
+
+  border-top: 1px solid #e2e8f0;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  color: #16a34a;
+}
+
+/* ================= ANIMATION ================= */
+
+/* Animation spécifique au bébé */
+/* Beaucoup plus discrète qu'avant */
+
+@keyframes babyPulse {
+
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.02);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 768px) {
+
+  .baby-body {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .baby-info {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .baby-big-text {
+    font-size: 26px;
+  }
+
+  .baby-emoji {
+    font-size: 60px;
+  }
+
+  .baby-header div:first-child {
+    font-size: 18px;
+  }
+}

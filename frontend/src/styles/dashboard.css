@@ -1,0 +1,126 @@
+
+/* ================= CONTENT ================= */
+
+.content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background: #f8fafc;
+}
+
+/* ================= GLOBAL LAYOUT ================= */
+
+.dashboard-layout {
+  display: grid;
+
+  grid-template-columns: 1fr 1.5fr;
+
+  grid-template-areas:
+    "baby camera"
+    "stats stats"
+    "bottom bottom"; /* 🔥 nouvelle row */
+
+  gap: 20px;
+}
+
+/* ================= GRID AREAS ================= */
+
+.baby-card {
+  grid-area: baby;
+  min-height: 240px;
+  position: relative;
+  overflow: hidden;
+}
+
+.camera-card {
+  grid-area: camera;
+  min-height: 200px;
+  display: flex;
+}
+
+.stats-row {
+  grid-area: stats;
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* 🔥 NOUVELLE ROW 3 */
+.bottom-row {
+  grid-area: bottom;
+
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+/* ================= GLOBAL CARD STYLE ================= */
+
+.baby-card,
+.camera-card,
+.mini-card {
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f1f5f9;
+
+  transition: 0.25s ease;
+}
+
+/* ================= HEIGHTS ================= */
+
+.baby-card {
+  min-height: 240px;
+}
+
+.camera-card {
+  min-height: 240px;
+}
+
+.mini-card {
+  min-height: 130px;
+}
+
+/* ================= HOVER ================= */
+
+.baby-card:hover,
+.camera-card:hover,
+.mini-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1200px) {
+  .dashboard-layout {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "baby"
+      "camera"
+      "stats"
+      "bottom"; /* 🔥 important */
+  }
+
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .bottom-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-row,
+  .bottom-row {
+    grid-template-columns: 1fr;
+  }
+
+  .content {
+    padding: 15px;
+  }
+}

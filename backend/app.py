@@ -1,70 +1,100 @@
-import eventlet
-eventlet.monkey_patch()
-
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_socketio import SocketIO
+import time
+
+from services.ai_engine import AIEngine
 
 app = Flask(__name__)
 CORS(app)
 
-socketio = SocketIO(
-    app,
-    cors_allowed_origins="*",
-    async_mode="eventlet"
-)
+socketio = SocketIO(app, cors_allowed_origins="*")
+
+engine = AIEngine()
+
+# =========================
+# STATE GLOBAL CLEAN
+# =========================
+state = {
+    "camera": {"presence": 0, "mouvement": 0},
+    "sensor": {"pir": 0, "temperature": 0, "sound_sensor": 0},
+    "audio_pc": {
+        "label": "silence",
+        "confidence": 100
+    },
+    "last_audio_time": 0
+}
+
+AUDIO_TIMEOUT = 10
+
 
 @app.route("/")
 def home():
-    return "Backend running 🚀"
+    return "Baby Monitor IA OK"
+
 
 @app.route("/data", methods=["POST"])
 def data():
-    payload = request.json
+    global state
 
-    son = payload.get("son", 0)
-    temperature = payload.get("temperature", 0)
-    mouvement = payload.get("mouvement", 0)
+    payload = request.json or {}
+    source = payload.get("source")
+    now = time.time()
 
     # =========================
-    # 🧠 LOGIQUE ETAT
+    # RASPBERRY
     # =========================
-    if son > 70 or temperature > 37 or (mouvement == 1 and son > 80):
-        etat = "alerte"
-        activite = "agité"
+    if source == "raspberry":
+        state["camera"] = payload.get("camera", state["camera"])
+        state["sensor"] = payload.get("sensor", state["sensor"])
 
-    elif son < 40 and temperature < 30:
-        etat = "normal"
-        activite = "dort"
+    # =========================
+    # AUDIO PC (ONLY MODIFIED PART)
+    # =========================
+    elif source == "audio_pc":
 
+        label = payload.get("label")
+        confidence = payload.get("confidence")
+
+        # 🔥 NEW OPTIONAL ENRICHMENT FIELDS (SAFE ADDITION)
+        energy = payload.get("energy")
+        proba = payload.get("proba")
+
+        if label is not None:
+            state["audio_pc"] = {
+                "label": label,
+                "confidence": confidence,
+                "energy": energy,
+                "proba": proba
+            }
+            state["last_audio_time"] = now
+
+            print("🎧 AUDIO REÇU:", state["audio_pc"])
+
+    # =========================
+    # AUDIO TIMEOUT LOGIC (UNCHANGED)
+    # =========================
+    if now - state["last_audio_time"] > AUDIO_TIMEOUT:
+        audio_use = {"label": "silence", "confidence": 100}
     else:
-        etat = "vigilance"
-        activite = "calme"
+        audio_use = state["audio_pc"]
 
     # =========================
-    # 📦 PAYLOAD FINAL
+    # IA ENGINE (UNCHANGED)
     # =========================
-    enriched_payload = {
-        "son": son,
-        "temperature": temperature,
-        "mouvement": mouvement,
-        "timestamp": payload.get("timestamp"),
-        "etat": etat,
-        "activite": activite
-    }
+    result = engine.decide(
+        state["camera"],
+        audio_use,
+        state["sensor"]
+    )
 
-    # =========================
-    # 📡 EMIT SOCKET
-    # =========================
-    socketio.emit("iot_update", enriched_payload)
+    # ⚠️ SOCKET EVENT UNIQUE (UNCHANGED)
+    socketio.emit("iot_update", result)
 
-    print("📤 SENT:", enriched_payload)
+    print("📡 DATA IA:", result)
 
-    return jsonify(enriched_payload)
+    return jsonify(result)
 
-@socketio.on("connect")
-def connect():
-    print("🟢 Client connected")
 
 if __name__ == "__main__":
-    socketio.run(app, host="127.0.0.1", port=5000, debug=True)
+    socketio.run(app, host="0.0.0.0", port=5000, debug=True)

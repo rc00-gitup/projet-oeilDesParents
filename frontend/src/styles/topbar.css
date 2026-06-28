@@ -1,0 +1,169 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+/* ================= TOPBAR ================= */
+.topbar {
+  display: flex;
+  align-items: center;
+
+  padding: 8px 18px; /* 🔥 compact */
+
+  background: #ffffff;
+  border-bottom: 1px solid #eef0f3;
+
+  gap: 12px;
+
+  font-family: "Inter", sans-serif;
+}
+
+/* spacer */
+.spacer {
+  flex: 1;
+}
+
+/* ================= TITLE ================= */
+.topbar-title h1 {
+  font-size: 25px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.topbar-title p {
+  font-size: 14px;
+  color: #14b15d;
+  margin-top: 2px;
+}
+
+/* ================= CARD BASE ================= */
+.topbar-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 6px 12px; /* 🔥 compact */
+
+  background: #ffffff;
+
+  border: 1px solid #eef0f3;
+  border-radius: 12px;
+
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.05);
+
+  transition: 0.2s ease;
+}
+
+.topbar-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.08);
+}
+
+/* ================= TIME ================= */
+.clock {
+  font-size: 16px;
+  color: #f59e0b;
+}
+
+.time {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.date {
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+/* ================= STATE SYSTEM ================= */
+.state {
+  font-family: "Space Grotesk", sans-serif;
+
+  min-width: 110px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 8px 10px;
+
+  border-radius: 12px;
+
+  background: #f8fafc;
+  border: 1px solid #eef0f3;
+}
+
+/* label neutre */
+.state .label {
+  font-size: 10px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+
+  font-family: "Inter", sans-serif;
+}
+
+/* value importante */
+.state .value {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+/* ================= COLORS ================= */
+.state.NORMAL {
+  border-left: 4px solid #16a34a;
+}
+
+.state.NORMAL .value {
+  color: #16a34a;
+}
+
+.state.VIGILANCE {
+  border-left: 4px solid #f59e0b;
+}
+
+.state.VIGILANCE .value {
+  color: #f59e0b;
+}
+
+.state.ALERTE {
+  border-left: 4px solid #ef4444;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.12);
+}
+
+.state.ALERTE .value {
+  color: #ef4444; /* 🔴 rouge */
+}
+
+/* ================= NOTIFICATION ================= */
+.notif {
+  position: relative;
+  font-size: 18px;
+
+  width: 42px;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.dot {
+  position: absolute;
+  top: 5px;
+  right: 6px;
+
+  width: 7px;
+  height: 7px;
+
+  background: #ef4444;
+  border-radius: 50%;
+
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+
+  animation: pulse 1.3s infinite;
+}
+
+/* ================= ANIMATION ================= */
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.5; }
+  100% { transform: scale(1); opacity: 1; }
+}

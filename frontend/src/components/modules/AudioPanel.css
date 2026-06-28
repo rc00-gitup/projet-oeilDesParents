@@ -1,0 +1,180 @@
+/* ================= CARD ================= */
+
+.audio-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  height: 100%;
+
+  font-family: "Inter", sans-serif;
+  color: #111827;
+}
+
+/* ================= HEADER ================= */
+
+.audio-header {
+  font-size: 15px;
+  font-weight: 900;
+  color: #111827;
+}
+
+/* ================= ETAT AUDIO ================= */
+
+.audio-state {
+  margin-top: -2px;
+
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.state-silence {
+  color: #22c55e;
+}
+
+.state-noise {
+  color: #f97316;
+}
+
+.state-cry {
+  color: #ef4444;
+}
+
+/* ================= MAIN ================= */
+
+.audio-main-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.audio-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.audio-level-text {
+  font-size: 13px;
+  color: #374151;
+}
+
+.audio-level-value {
+  margin-left: 6px;
+  font-weight: 800;
+}
+
+/* niveaux */
+
+.level-low {
+  color: #22c55e;
+}
+
+.level-medium {
+  color: #f59e0b;
+}
+
+.level-high {
+  color: #ef4444;
+}
+
+.audio-sub {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+/* ================= ICONE ================= */
+
+.audio-big-icon {
+  font-size: 58px;
+
+  min-width: 80px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: #f97316;
+  opacity: 0.9;
+}
+
+/* ================= BAR ================= */
+
+.audio-bar {
+  width: 55%;
+
+  height: 10px;
+
+  background: #e5e7eb;
+
+  border-radius: 999px;
+
+  overflow: hidden;
+}
+
+.audio-fill {
+  height: 100%;
+  border-radius: 999px;
+
+  transition: width 0.5s ease;
+}
+
+.audio-fill.silence {
+  background: linear-gradient(
+    90deg,
+    #22c55e,
+    #4ade80
+  );
+}
+
+.audio-fill.noise {
+  background: linear-gradient(
+    90deg,
+    #f59e0b,
+    #f97316
+  );
+}
+
+.audio-fill.cry {
+  background: linear-gradient(
+    90deg,
+    #ef4444,
+    #dc2626
+  );
+}
+
+/* ================= TEXTE BAS ================= */
+
+.audio-silence-row {
+  margin-top: -2px;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  color: #6b7280;
+}
+
+/* ================= CONFIANCE ================= */
+
+.audio-confidence-box {
+  margin-top: 4px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 6px 10px;
+
+  background: #f96a05e9;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+
+  border-radius: 8px;
+
+  width: fit-content;
+}
+
+.audio-confidence-box span {
+  font-weight: 900;
+}

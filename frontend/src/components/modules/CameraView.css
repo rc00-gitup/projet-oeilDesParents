@@ -1,0 +1,196 @@
+.camera-view {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* ================= HEADER ================= */
+
+.camera-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 10px;
+}
+
+.camera-title {
+  font-size: 20px;
+  font-weight: 900;
+  color: #2563eb;
+}
+
+.camera-live {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-size: 13px;
+  font-weight: 900;
+  color: #16a34a;
+}
+
+/* ================= LIVE ================= */
+
+.live-dot {
+  width: 10px;
+  height: 10px;
+
+  border-radius: 50%;
+}
+
+.online {
+  background: #22c55e;
+  animation: pulse 1.5s infinite;
+}
+
+.offline {
+  background: #ef4444;
+}
+
+/* ================= BODY ================= */
+
+.camera-body {
+  display: grid;
+  grid-template-columns: 5fr 1fr;
+
+  gap: 14px;
+}
+
+/* ================= VIDEO ================= */
+
+.camera-video {
+  height: 260px;
+
+  overflow: hidden;
+
+  border-radius: 14px;
+
+  border: 1px solid #e5e7eb;
+
+  background: #000;
+}
+
+.camera-stream {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+}
+
+/* ================= DATA ================= */
+
+.camera-data {
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+/* ================= ITEM ================= */
+
+.camera-item {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  background: #ffffff;
+
+  border-radius: 12px;
+
+  padding: 10px 12px;
+
+  border: 1px solid #e5e7eb;
+
+  transition: 0.25s ease;
+}
+
+.camera-item:hover {
+  transform: translateY(-2px);
+}
+
+/* Barre colorée */
+
+.camera-item::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  top: 0;
+
+  width: 5px;
+  height: 100%;
+
+  border-radius: 12px 0 0 12px;
+}
+
+/* Présence */
+
+.camera-item:nth-child(1)::before {
+  background: #22c55e;
+}
+
+/* Mouvement */
+
+.camera-item:nth-child(2)::before {
+  background: #f97316;
+}
+
+/* Yeux */
+
+.camera-item:nth-child(3)::before {
+  background: #7c3aed;
+}
+
+/* ================= ICON ================= */
+
+.camera-icon {
+  font-size: 22px;
+}
+
+/* ================= TEXT ================= */
+
+.camera-label {
+  font-size: 10px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 1px;
+
+  color: #64748b;
+
+  font-weight: 700;
+}
+
+.camera-value {
+  font-size: 14px;
+
+  font-weight: 900;
+
+  color: #111827;
+}
+
+/* ================= ANIMATION ================= */
+
+@keyframes pulse {
+
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.4);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}

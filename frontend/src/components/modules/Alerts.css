@@ -1,0 +1,146 @@
+/* ================= CARD ================= */
+
+.alerts-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  font-family: "Inter", sans-serif;
+}
+
+/* ================= HEADER ================= */
+
+.alerts-header {
+  font-size: 15px;
+  font-weight: 800;
+  color: #111827;
+}
+
+/* ================= SUBTITLE ================= */
+
+.alerts-subtitle {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+/* ================= LIST ================= */
+
+.alerts-list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+  margin-top: 12px;
+
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* ================= ITEM ================= */
+
+.alert-item {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 9px 12px;
+
+  border-radius: 10px;
+  border-left: 4px solid;
+
+  transition: all 0.2s ease;
+}
+
+.alert-item:hover {
+  transform: translateX(3px);
+}
+
+/* ================= ICON ================= */
+
+.alert-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+/* ================= CONTENT ================= */
+
+.alert-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* ================= TEXT ================= */
+
+.alert-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.35;
+}
+
+/* ================= TIME ================= */
+
+.alert-time {
+  font-size: 10px;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+/* ================= EMPTY ================= */
+
+.alerts-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  flex: 1;
+
+  padding: 20px;
+
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+/* ================= COLORS ================= */
+
+/* 🚨 Critique */
+.alert-item.danger {
+  background: #fef2f2;
+  border-left-color: #ef4444;
+}
+
+/* ⚠️ Attention */
+.alert-item.warning {
+  background: #fff7ed;
+  border-left-color: #f97316;
+}
+
+/* ✅ Stable */
+.alert-item.success {
+  background: #f0fdf4;
+  border-left-color: #22c55e;
+}
+
+/* ℹ️ Information */
+.alert-item.info {
+  background: #eff6ff;
+  border-left-color: #3b82f6;
+}
+
+/* ================= SCROLL ================= */
+
+.alerts-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.alerts-list::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 10px;
+}
+
+.alerts-list::-webkit-scrollbar-track {
+  background: transparent;
+}
